@@ -89,6 +89,23 @@ void Grid::PolygonFilledMethod(std::vector<Dot> dots, COLORREF BorderColor)
     }
 }
 
+void Grid::PointsFilledMethod(std::vector<Dot> dots, COLORREF BorderColor)
+{
+    std::cout << "What method to fill?\n"
+        "1 - Delaynay Triangulation\n";
+    switch (char ch = _getch())
+    {
+        COLORREF SelfColor;
+    case '1':
+    {
+        SelfColor = SetBrush();
+        this->DelaunayTriangulation(dots, BorderColor, SelfColor);
+        break;
+    }
+
+    }
+}
+
 void Grid::FilledTriangle(Dot dot1, Dot dot2, Dot dot3)
 {
     int x_dots[3] = { dot1.x, dot2.x, dot3.x };

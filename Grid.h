@@ -52,6 +52,8 @@ public:
     void Triangle(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderColor);
     // Рисует многоугольник.
     void Polygon(std::vector<Dot> dots, COLORREF BorderColor);
+    // Рисует множество точек.
+    void Points(std::vector<Dot> dots, COLORREF BorderColor);
     // Выбирает кисть по цвету.
     COLORREF SetBrush();
        
@@ -78,13 +80,15 @@ private:
     void TriangleFilledMethod(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderColor);
     // Метод заполнения многоугольника.
     void PolygonFilledMethod(std::vector<Dot> dots, COLORREF BorderColor);
+    // Метод заполнения точек.
+    void PointsFilledMethod(std::vector<Dot> dots, COLORREF BorderColor);
     // Метод заполнения треугольника.
     void FilledTriangle(Dot dot1, Dot dot2, Dot dot3);
     // Метод заполнения затравкой.
     void FilledSeed(Dot dot, COLORREF BolderColor, COLORREF selfColor);
     // Метод заполнения списком реберных точек.
     void FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
-    // Метод Триангуляцию Делоне.
+    // Метод Триангуляции Делоне.
     void DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
     // Нахождение средней точки в многоугольнике.
     Dot GetMiddleDot(Dot dot1, Dot dot2);

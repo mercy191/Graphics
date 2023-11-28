@@ -12,7 +12,7 @@ int main()
         "2 - Bresenham line; "
         "3 - Circle;\n"
         "4 - Triangle; "
-        "5 - Polygon;"
+        "5 - Polygon; "
         "6 - Delaunay Triangulation;\n";
     for (bool flag = true; flag;)
     {
@@ -72,8 +72,25 @@ int main()
             color = my_grid.SetBrush();
             my_grid.Polygon(dots, color);
             break;
-        }
 
+        }
+        case '6':
+        {
+            int points;
+            Dot dot;
+            std::cout << "Enter number of points: ";
+            std::cin >> points;
+            std::vector<Dot> dots(points);
+            std::cout << "Enter the coordinates of the points: ";
+            for (int i = 0; i < points; ++i) {
+                std::cin >> dot.x >> dot.y;
+                dots[i] = dot;
+            }
+            color = my_grid.SetBrush();
+            my_grid.Points(dots, color);
+            break;
+        }
+        
         }
         std::cout << "More?(y/n): \n";
         flag = _getch() == 'y';

@@ -216,6 +216,17 @@ void Grid::Polygon(std::vector<Dot> dots, COLORREF BorderColor)
     PolygonFilledMethod(dots, BorderColor);
 }
 
+void Grid::Points(std::vector<Dot> dots, COLORREF BorderColor) 
+{
+    for (Dot dot : dots) {
+        int left_x = start_x + dot.x * step;
+        int top_y = stop_y - (dot.y + 1) * step;
+        PutPixel(left_x + 1, top_y + 1, left_x + step, top_y + step);
+    }
+
+    PointsFilledMethod(dots, BorderColor);
+}
+
 bool Grid::InGrid(int left, int top)
 {
     if (left >= start_x && left < stop_x && top >= start_y && top < stop_y) return true;
