@@ -35,48 +35,67 @@ COLORREF Grid::SetBrush()
     switch (ch)
     {
     case '1':
+    {
         SelectBrush(hdc, beigeBrush);
         SelectPen(hdc, dcPen);
         return BEIGE_C;
+    }
     case '2':
+    {
         SelectBrush(hdc, yellowBrush);
         SelectPen(hdc, dcPen);
         return YELLOW_C;
+    }
     case '3':
+    {
         SelectBrush(hdc, pinkBrush);
         SelectPen(hdc, dcPen);
         return PINK_C;
+    }
     case '4':
+    {
         SelectBrush(hdc, grinBrush);
         SelectPen(hdc, dcPen);
         return GRIN_C;
+    }
     case '5':
+    {
         SelectBrush(hdc, redBrush);
         SelectPen(hdc, dcPen);
         return RED_C;
+    }
     case '6':
+    {
         SelectBrush(hdc, blueBrush);
         SelectPen(hdc, dcPen);
         return BLUE_C;
+    }
     case '7':
+    {
         SelectBrush(hdc, skinBrush);
         SelectPen(hdc, dcPen);
         return SKIN_C;
+    }
     case '8':
+    {
         SelectBrush(hdc, purpleBrush);
         SelectPen(hdc, dcPen);
         return PURPLE_C;
+    }
     case '9':
+    {
         SelectBrush(hdc, orangeBrush);
         SelectPen(hdc, dcPen);
         return ORANGE_C;
+    }
     case '0':
+    {
         SelectBrush(hdc, blackBrush);
         SelectPen(hdc, dcPen);
         return BLACK_C;
     }
-    
 
+    }
 }
 
 

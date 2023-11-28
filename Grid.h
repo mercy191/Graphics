@@ -84,6 +84,8 @@ private:
     void FilledSeed(Dot dot, COLORREF BolderColor, COLORREF selfColor);
     // Метод заполнения списком реберных точек.
     void FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
+    // Метод Триангуляцию Делоне.
+    void DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
     // Нахождение средней точки в многоугольнике.
     Dot GetMiddleDot(Dot dot1, Dot dot2);
     // Проверяет пиксель на принадлежность сетке.

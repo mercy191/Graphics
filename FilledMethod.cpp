@@ -9,24 +9,27 @@ void Grid::CircleFilledMethod(Dot dot, int radius, COLORREF BorderColor)
     {
         COLORREF SelfColor;
     case '1':
+    {
         Dot dot2;
         Dot dot3;
-        SelfColor = SetBrush();       
+        SelfColor = SetBrush();
         for (int i = 0; i < 40; i++) {
             dot2.x = dot.x + round(sin(0.157 * i) * (radius - 1));
             dot2.y = dot.y + round(cos(0.157 * i) * (radius - 1));
             dot3.x = dot.x + round(sin(0.157 * (i + 4)) * (radius - 1));
             dot3.y = dot.y + round(cos(0.157 * (i + 4)) * (radius - 1));
             this->FilledTriangle(dot, dot2, dot3);
-        }      
+        }
         break;
+    }
     case '2':
+    {
         SelfColor = SetBrush();
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
     }
-    
 
+    }
 }
 
 void Grid::TriangleFilledMethod(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderColor)
@@ -38,14 +41,19 @@ void Grid::TriangleFilledMethod(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderCol
     {
         COLORREF SelfColor;
     case '1':
+    {
         SelfColor = SetBrush();
         this->FilledTriangle(dot1, dot2, dot3);
         break;
+    }
     case '2':
+    {
         Dot dot = GetMiddleDot(dot1, GetMiddleDot(dot2, dot3));
         SelfColor = SetBrush();
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
+    }
+
     }
 }
 
@@ -53,19 +61,31 @@ void Grid::PolygonFilledMethod(std::vector<Dot> dots, COLORREF BorderColor)
 {
     std::cout << "What method to fill?\n"
         "1 - Edgepoints method;\n"
-        "2 - Seeding method;\n";
+        "2 - Seeding method;\n"
+        "3 - Delaynay Triangulation\n";
     switch (char ch = _getch())
     {
         COLORREF SelfColor;
     case '1':
+    {
         SelfColor = SetBrush();
         this->FilledEdgePoints(dots, BorderColor, SelfColor);
         break;
+    }
     case '2':
+    {
         Dot dot = GetMiddleDot(GetMiddleDot(dots[0], dots[1]), GetMiddleDot(dots[dots.size() - 1], dots[dots.size() - 2]));
         SelfColor = SetBrush();
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
+    }
+    case '3':
+    {
+        SelfColor = SetBrush();
+        this->DelaunayTriangulation(dots, BorderColor, SelfColor);
+        break;
+    }
+
     }
 }
 
@@ -191,6 +211,11 @@ void Grid::FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORRE
             }
         }
     }  
+}
+
+void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor)
+{
+
 }
 
 Dot Grid::GetMiddleDot(Dot dot1, Dot dot2)
