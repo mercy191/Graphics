@@ -34,6 +34,8 @@ struct Dot {
 class Grid {
 
 public:
+    /*Основные функции для работы с классом.*/
+
     // Конструктор по умолчанию.
     Grid();  
     // Конструктор с аргументами.
@@ -66,22 +68,21 @@ private:
     int stop_x;
     int stop_y;
     int step;
-    bool net_create;
+    bool net_create;   
 
-    // Закрашивает пиксель.
-    void PutPixel(int left, int top, int right, int buttom);
-    // Линия по методу ЦДА по оси Х.
-    void LineXDDA(Dot dot1, Dot dot2);
-    // Линия по методу ЦДА по оси Y.
-    void LineYDDA(Dot dot1, Dot dot2);
+    /*Выбор методов заполнения различных фигур.*/
+
     // Выбор метода заполнения круга.
     void CircleFilledMethod(Dot dot, int radius, COLORREF BorderColor);
-    // Выбор метод заполения треугольника.
+    // Выбор метода заполения треугольника.
     void TriangleFilledMethod(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderColor);
-    // Метод заполнения многоугольника.
+    // Выбор метода заполнения многоугольника.
     void PolygonFilledMethod(std::vector<Dot> dots, COLORREF BorderColor);
-    // Метод заполнения точек.
+    // Выбор метода заполнения точек.
     void PointsFilledMethod(std::vector<Dot> dots, COLORREF BorderColor);
+
+    /*Методы заполнения различных фигур.*/
+
     // Метод заполнения треугольника.
     void FilledTriangle(Dot dot1, Dot dot2, Dot dot3);
     // Метод заполнения затравкой.
@@ -90,10 +91,44 @@ private:
     void FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
     // Метод Триангуляции Делоне.
     void DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor);
+
+    /*Вспомогательные функции.*/
+
+    // Закрашивает пиксель.
+    void PutPixel(int left, int top, int right, int buttom);
+    // Линия по методу ЦДА по оси Х.
+    void LineXDDA(Dot dot1, Dot dot2);
+    // Линия по методу ЦДА по оси Y.
+    void LineYDDA(Dot dot1, Dot dot2);
     // Нахождение средней точки в многоугольнике.
     Dot GetMiddleDot(Dot dot1, Dot dot2);
     // Проверяет пиксель на принадлежность сетке.
     bool InGrid(int left, int top);
     // Получает номер цвета.
-    char GetColor();   
+    char GetColor();
+    // Получает самое первое ребро для Триангуляции Делоне.
+    void GetFirstEdge(std::vector<Dot>& dots, int& index0, int& index1);
+    // Возвращает индекс самого короткого ребра в списке.
+    int MostShortEdge(std::vector<Dot>& edges);
+    // Находит точку, удовлетворяющую условию Делоне.
+    void JoinDot(Dot& a, Dot& b, std::vector<Dot>& dots, std::vector<Dot>& adj);
+    // Находит параметр 2*t для нахождения центра описанной окружности вокруг треугольника.
+    double TwoT(Dot& dot1, Dot& dot2, Dot& dot3);
+    // Добавляет ребро, если это ребро не является стороной треугольников.
+    void AddEdge(std::vector<Dot>& edges, std::vector<Dot>& triangle, Dot& dot1, Dot& dot2);
+    // Проверяет совпадение точек.
+    bool SameDots(Dot& dot1, Dot& dot2);
+    // Проверяет совпадение отрезков.
+    bool SameEdges(Dot& dot1, Dot& dot2, Dot& dot3, Dot& dot4);
+    // Проверяет равенство треугольников.
+    bool SameTriangles(Dot& dot1_1, Dot& dot1_2, Dot& dot1_3, Dot& dot2_1, Dot& dot2_2, Dot& dot2_3);
+    // Проверяет ребро на принадлежность к треугольнику.
+    bool EdgeInTriangle(std::vector<Dot>& triangle, Dot& dot1, Dot& dot2);
+    // Добавляет треугольник.
+    void AddTriangle(std::vector<Dot>& triangles, Dot& dot1, Dot& dot2, Dot& dot3, int& index);
+    // Возвращает косинус угла между ребрами.
+    double CosEdges(Dot& dot1, Dot& dot2, Dot& dot3);
+    // Переставляет точки местами.
+    void SwapDots(Dot& dot1, Dot& dot2);
+
 };

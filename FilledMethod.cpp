@@ -163,23 +163,23 @@ void Grid::FilledSeed(Dot dot, COLORREF BorderColor, COLORREF SelfColor)
 void Grid::FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor)
 {  
     std::map<int, std::vector<int>> edgepoints;
-    std::vector<std::pair<Dot, Dot>> ribs;
+    std::vector<std::pair<Dot, Dot>> edges;
 
     for (int i = 1; i < dots.size(); ++i) {
         Dot dot1 = dots[i - 1];
         Dot dot2 = dots[i];
         if (dot1.y != dot2.y)
-            ribs.push_back(std::make_pair(dot1, dot2));
+            edges.push_back(std::make_pair(dot1, dot2));
     }
     if (dots[dots.size() - 1].y != dots[0].y) {
-        ribs.push_back(std::make_pair(dots[dots.size() - 1], dots[0]));
+        edges.push_back(std::make_pair(dots[dots.size() - 1], dots[0]));
     }
 
-    for (auto& rib : ribs) {
-        int y1 = rib.first.y;
-        int y2 = rib.second.y; 
-        int x1 = rib.first.x;
-        int x2 = rib.second.x;
+    for (auto& edge : edges) {
+        int y1 = edge.first.y;
+        int y2 = edge.second.y;
+        int x1 = edge.first.x;
+        int x2 = edge.second.x;
         if (y1 > y2) {
             std::swap(y1, y2);
             std::swap(x1, x2);
@@ -232,13 +232,89 @@ void Grid::FilledEdgePoints(std::vector<Dot> dots, COLORREF BorderColor, COLORRE
 
 void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, COLORREF SelfColor)
 {
+    std::vector<Dot> triangles; // Список полученных треугольников по Треангуляции Делоне
+    std::vector<Dot> edges;     // Список ребер.
+    std::vector<Dot> adj;       // Список вершин, присоединенных к ребру.
+    Dot dot1, dot2, dot3;
 
-}
+    if (dots.size() < 3) {
+        return;
+    }
 
-Dot Grid::GetMiddleDot(Dot dot1, Dot dot2)
-{
-    Dot result;
-    result.x = int(round((dot1.x + dot2.x) / 2));
-    result.y = int(round((dot2.y + dot1.y) / 2));
-    return result;
+    // Вставляем начальное ребро.
+    int i0 = 0, i1 = 0; 
+    GetFirstEdge(dots, i0, i1);   
+    edges.push_back(dots[i0]);
+    edges.push_back(dots[i1]);
+    
+
+    int i = 0, j = 0;
+    while (edges.size() > 0) { // Пока есть ребра, которые мы не обработали
+        // Находим самое короткое ребро в списке
+        i = MostShortEdge(edges);
+        dot1 = edges[i];
+        dot2 = edges[i + 1];
+        edges.erase(edges.begin() + i, edges.begin() + i + 2);
+        JoinDot(dot1, dot2, dots, adj);
+
+        
+        if (adj.size() == 0) continue;	// Если присоединенных вершин нет - просто идем дальше.
+
+        if (adj.size() == 1) {  // Если присоединенная вершина только одна.
+            dot3 = adj[0];
+            int triangle_sq = (dot2.x - dot1.x) * (dot3.y - dot1.y) - (dot2.y - dot1.y) * (dot3.x - dot1.x);
+            if (triangle_sq <= 0) return;
+
+            // Добавим ребра в список, если они не являются ребрами треугольника.
+            AddEdge(edges, triangles, dot1, dot3); // (dot1,dot3)
+            AddEdge(edges, triangles, dot3, dot2); // (dot3,dot2)
+            AddTriangle(triangles, dot1, dot2, dot3, i);
+            continue;
+        }
+
+        // Остался случай, когда присоедиенных вершин несколько.
+        // Отсотрируем их в порядке ВОЗРАСТАНИЯ косинуса угла <v2, v1, adj[i]>
+        for (i = 1; i < adj.size(); i++) {
+            double a0 = CosEdges(dot2, dot1, adj[i - 1]);
+            double a1 = CosEdges(dot2, dot1, adj[i]);
+            if (a0 < a1) {
+                SwapDots(adj[i - 1], adj[i]);
+                if (i > 1) i -= 2;
+            }
+
+        }
+
+        // Теперь углы <v2, v1, adj[i]> возрастают.
+        // Добавляем треугольники
+        // dot1, dot2, adj[0],
+        // dot1, adj[0], adj[1],
+        // ...
+        // dot1, adj[k-2], adj[k-1],
+        AddEdge(edges, triangles, adj[0], dot2); // (adj[i], v2)
+        AddTriangle(triangles, dot1, dot2, adj[0], j);
+
+        for (i = 1; i < adj.size(); i++) {
+            AddEdge(edges, triangles, adj[i], adj[i - 1]); // (adj[i], adj[i-1])
+            AddTriangle(triangles, dot1, adj[i], adj[i - 1], j);
+        }
+
+        AddEdge(edges, triangles, dot1, adj[adj.size() - 1]); // (dot1, adj[last])
+    }
+
+    // Переставим теперь вершины в каждом треугольнке так, чтобы его площадь была >0.
+    for (i = 0; i < triangles.size(); i += 3) {
+        int triangle_sq = (triangles[i + 1].x - triangles[i].x) * (triangles[i + 2].y - triangles[i].y) - 
+            (triangles[i + 1].y - triangles[i].y) * (triangles[i + 2].x - triangles[i].x);
+        if (triangle_sq < 0) {
+            SwapDots(triangles[i], triangles[i + 1]);
+        }
+    }
+
+    // Выведем Триангуляцию на экран.
+    for (i = 0; i < triangles.size(); i += 3) {
+
+        LineDDA(triangles[i], triangles[i + 1]);
+        LineDDA(triangles[i], triangles[i + 2]);
+        LineDDA(triangles[i + 1], triangles[i + 2]);
+    }
 }
