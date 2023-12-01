@@ -13,7 +13,7 @@ void Grid::CircleFilledMethod(Dot dot, int radius, COLORREF BorderColor)
         Dot dot2;
         Dot dot3;
         SelfColor = SetBrush();
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 40; ++i) {
             dot2.x = dot.x + round(sin(0.157 * i) * (radius - 1));
             dot2.y = dot.y + round(cos(0.157 * i) * (radius - 1));
             dot3.x = dot.x + round(sin(0.157 * (i + 4)) * (radius - 1));
@@ -110,8 +110,9 @@ void Grid::FilledTriangle(Dot dot1, Dot dot2, Dot dot3)
 {
     int x_dots[3] = { dot1.x, dot2.x, dot3.x };
     int y_dots[3] = { dot1.y, dot2.y, dot3.y };
-    for (int i = 0; i < 2; i++)
-        for (int j = 0; j < 2; j++)
+
+    for (int i = 0; i < 2; ++i)
+        for (int j = 0; j < 2; ++j)
             if (y_dots[j] < y_dots[j + 1])
             {
                 int tmp = y_dots[j + 1];
@@ -125,7 +126,7 @@ void Grid::FilledTriangle(Dot dot1, Dot dot2, Dot dot3)
     dot3.x = x_dots[0]; dot2.x = x_dots[1]; dot1.x = x_dots[2];
 
     int x1, x2, sy = dot3.y;
-    for (; sy >= dot2.y; sy--)
+    for (; sy >= dot2.y; --sy)
     {
         if (dot2.y != dot3.y) {
             x1 = dot3.x + int(round((dot1.x - dot3.x) * (sy - dot3.y) / (dot1.y - dot3.y)));
@@ -133,7 +134,7 @@ void Grid::FilledTriangle(Dot dot1, Dot dot2, Dot dot3)
             LineDDA({ x1, sy }, { x2, sy });
         }       
     }
-    for (; sy >= dot1.y; sy--)
+    for (; sy >= dot1.y; --sy)
     {
         x1 = dot3.x + int(round((dot1.x - dot3.x) * (sy - dot3.y) / (dot1.y - dot3.y)));
         x2 = dot2.x + int(round((dot1.x - dot2.x) * (sy - dot2.y) / (dot1.y - dot2.y)));

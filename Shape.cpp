@@ -164,8 +164,8 @@ void Grid::Circle(Dot dot, int radius, COLORREF BorderColor)
         PutPixel(left_x - y * step + 1, top_y - x * step + 1, left_x - y * step + step, top_y - x * step + step);
         int dh = x * x + (y - 1) * (y - 1) - radius * radius;
         int dc = (x - 1) * (x - 1) + (y - 1) * (y - 1) - radius * radius;
-        if (abs(dh) > abs(dc)) x--;
-        y--;
+        if (abs(dh) > abs(dc)) --x;
+        --y;
     }
     CircleFilledMethod(dot, radius, BorderColor);
 }
