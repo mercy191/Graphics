@@ -125,7 +125,7 @@ private:
     // Проверяет ребро на принадлежность к треугольнику.
     bool EdgeInTriangle(std::vector<Dot>& triangle, Dot& dot1, Dot& dot2);
     // Добавляет треугольник.
-    void AddTriangle(std::vector<Dot>& triangles, Dot& dot1, Dot& dot2, Dot& dot3, int& index);
+    void AddTriangle(std::vector<Dot>& triangles, Dot& dot1, Dot& dot2, Dot& dot3);
     // Возвращает косинус угла между ребрами.
     double CosEdges(Dot& dot1, Dot& dot2, Dot& dot3);
     // Переставляет точки местами.

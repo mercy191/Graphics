@@ -248,13 +248,13 @@ void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, CO
     edges.push_back(dots[i1]);
     
 
-    int i = 0, j = 0;
+
     while (edges.size() > 0) { // Пока есть ребра, которые мы не обработали
         // Находим самое короткое ребро в списке
-        i = MostShortEdge(edges);
-        dot1 = edges[i];
-        dot2 = edges[i + 1];
-        edges.erase(edges.begin() + i, edges.begin() + i + 2);
+        int index = MostShortEdge(edges);
+        dot1 = edges[index];
+        dot2 = edges[index + 1];
+        edges.erase(edges.begin() + index, edges.begin() + index + 2);
         JoinDot(dot1, dot2, dots, adj);
 
         
@@ -268,13 +268,13 @@ void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, CO
             // Добавим ребра в список, если они не являются ребрами треугольника.
             AddEdge(edges, triangles, dot1, dot3); // (dot1,dot3)
             AddEdge(edges, triangles, dot3, dot2); // (dot3,dot2)
-            AddTriangle(triangles, dot1, dot2, dot3, i);
+            AddTriangle(triangles, dot1, dot2, dot3);
             continue;
         }
 
         // Остался случай, когда присоедиенных вершин несколько.
-        // Отсотрируем их в порядке ВОЗРАСТАНИЯ косинуса угла <v2, v1, adj[i]>
-        for (i = 1; i < adj.size(); i++) {
+        // Отсотрируем их в порядке ВОЗРАСТАНИЯ косинуса угла <dot2, dot1, adj[i]>
+        for (int i = 1; i < adj.size(); ++i) {
             double a0 = CosEdges(dot2, dot1, adj[i - 1]);
             double a1 = CosEdges(dot2, dot1, adj[i]);
             if (a0 < a1) {
@@ -284,25 +284,25 @@ void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, CO
 
         }
 
-        // Теперь углы <v2, v1, adj[i]> возрастают.
+        // Теперь углы <dot2, dot1, adj[i]> возрастают.
         // Добавляем треугольники
         // dot1, dot2, adj[0],
         // dot1, adj[0], adj[1],
         // ...
         // dot1, adj[k-2], adj[k-1],
-        AddEdge(edges, triangles, adj[0], dot2); // (adj[i], v2)
-        AddTriangle(triangles, dot1, dot2, adj[0], j);
+        AddEdge(edges, triangles, adj[0], dot2);      // (adj[0], dot2)
+        AddTriangle(triangles, dot1, dot2, adj[0]);
 
-        for (i = 1; i < adj.size(); i++) {
+        for (int i = 1; i < adj.size(); ++i) {
             AddEdge(edges, triangles, adj[i], adj[i - 1]); // (adj[i], adj[i-1])
-            AddTriangle(triangles, dot1, adj[i], adj[i - 1], j);
+            AddTriangle(triangles, dot1, adj[i], adj[i - 1]);
         }
 
         AddEdge(edges, triangles, dot1, adj[adj.size() - 1]); // (dot1, adj[last])
     }
 
-    // Переставим теперь вершины в каждом треугольнке так, чтобы его площадь была >0.
-    for (i = 0; i < triangles.size(); i += 3) {
+    // Переставим теперь вершины в каждом треугольнке так, чтобы его площадь была > 0.
+    for (int i = 0; i < triangles.size(); i += 3) {
         int triangle_sq = (triangles[i + 1].x - triangles[i].x) * (triangles[i + 2].y - triangles[i].y) - 
             (triangles[i + 1].y - triangles[i].y) * (triangles[i + 2].x - triangles[i].x);
         if (triangle_sq < 0) {
@@ -311,7 +311,7 @@ void Grid::DelaunayTriangulation(std::vector<Dot> dots, COLORREF BorderColor, CO
     }
 
     // Выведем Триангуляцию на экран.
-    for (i = 0; i < triangles.size(); i += 3) {
+    for (int i = 0; i < triangles.size(); i += 3) {
 
         LineDDA(triangles[i], triangles[i + 1]);
         LineDDA(triangles[i], triangles[i + 2]);
