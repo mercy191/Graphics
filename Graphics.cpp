@@ -82,8 +82,11 @@ int main()
             std::cin >> points;
             std::vector<Dot> dots(points);
             std::cout << "Enter the coordinates of the points: ";
+            srand(time(0));
             for (int i = 0; i < points; ++i) {
-                std::cin >> dot.x >> dot.y;
+                dot.x = rand() % 119 + 1;
+                dot.y = rand() & 119 + 1;
+                //std::cin >> dot.x >> dot.y;
                 dots[i] = dot;
             }
             color = my_grid.SetBrush();

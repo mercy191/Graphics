@@ -24,7 +24,7 @@ Grid::~Grid()
 void Grid::CreateGrid()
 {
     SelectBrush(hdc, GetStockBrush(BLACK_BRUSH));
-    SelectPen(hdc, GetStockPen(WHITE_PEN));
+    SelectPen(hdc, GetStockPen(BLACK_PEN));
 
     for (int x = start_x; x <= stop_x; x += step) { // –исуем линии по оси Y.
         MoveToEx(hdc, x, start_y, NULL);
