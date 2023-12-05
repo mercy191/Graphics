@@ -86,7 +86,6 @@ int main()
             for (int i = 0; i < points; ++i) {
                 dot.x = rand() % 119 + 1;
                 dot.y = rand() & 119 + 1;
-                //std::cin >> dot.x >> dot.y;
                 dots[i] = dot;
             }
             color = my_grid.SetBrush();

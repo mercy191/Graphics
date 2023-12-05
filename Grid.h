@@ -11,7 +11,7 @@
  /*Размеры отступа сетки.*/
 constexpr auto INDENTX = 700;
 constexpr auto INDENTY = 200;
-constexpr auto CELLSIZE = 10;
+constexpr auto CELLSIZE = 6;
 
  /*Цветовая палитра программы.*/
 constexpr auto BLACK_C = RGB(0, 0, 2);
