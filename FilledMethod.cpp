@@ -25,6 +25,7 @@ void Grid::CircleFilledMethod(Dot dot, int radius, COLORREF BorderColor)
     case '2':
     {
         SelfColor = SetBrush();
+        BorderColor = GetPixel(hdc, start_x + dot.x * step + step / 2, stop_y - (dot.y + 1) * step + step / 2);
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
     }
@@ -50,6 +51,7 @@ void Grid::TriangleFilledMethod(Dot dot1, Dot dot2, Dot dot3, COLORREF BorderCol
     {
         Dot dot = GetMiddleDot(dot1, GetMiddleDot(dot2, dot3));
         SelfColor = SetBrush();
+        BorderColor = GetPixel(hdc, start_x + dot.x * step + step / 2, stop_y - (dot.y + 1) * step + step / 2);
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
     }
@@ -76,6 +78,7 @@ void Grid::PolygonFilledMethod(std::vector<Dot> dots, COLORREF BorderColor)
     {
         Dot dot = GetMiddleDot(GetMiddleDot(dots[0], dots[1]), GetMiddleDot(dots[dots.size() - 1], dots[dots.size() - 2]));
         SelfColor = SetBrush();
+        BorderColor = GetPixel(hdc, start_x + dot.x * step + step / 2, stop_y - (dot.y + 1) * step + step / 2);
         this->FilledSeed(dot, BorderColor, SelfColor);
         break;
     }
@@ -151,7 +154,7 @@ void Grid::FilledSeed(Dot dot, COLORREF BorderColor, COLORREF SelfColor)
     int top_y = stop_y - (dot.y + 1) * step;
     if (!InGrid(left_x, top_y)) return;
     auto c = GetPixel(hdc, left_x + step / 2, top_y + step / 2);
-    if ((c != BorderColor) && (c != SelfColor))
+    if ((c == BorderColor) && (c != SelfColor))
     {
         PutPixel(left_x + 1, top_y + 1, left_x + step, top_y + step);
         this->FilledSeed({ x - 1, y }, BorderColor, SelfColor);
